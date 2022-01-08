@@ -137,7 +137,7 @@ Snakemake allows for fine-tuning resource allocation to the individual rules, i.
 
 Software Dependencies
 ^^^^^^^^^^^^^^^^^^^^^
-We recommend running the workflow in its own ``conda environment`` on a Linux Server. Dependencies are listed in ``envs/condaenv.yml`` and ``envs/additional.yml``. A brief explanation how to use these files to generate the conda environment is further below. For comprehensive explanation please consult the `conda <https://docs.conda.io/projects/conda/en/latest/user-guide/getting-started.html>`_ documentation. For software that is not available through conda on some important platforms we make the specific binaries available in ``envs/``; currently mainly abra2.jar.
+We recommend running the workflow in its own ``conda environment`` on a Linux Server. Dependencies are listed in .yml files in ``envs/``. A brief explanation how to use these files to generate the conda environment is further below. For comprehensive explanation please consult the `conda <https://docs.conda.io/projects/conda/en/latest/user-guide/getting-started.html>`_ documentation. For software that is not available through conda on some important platforms we make the specific binaries available in ``envs/``; currently mainly abra2.jar.
 
 
 Workflow Use in a Nutshell - Checklist
@@ -149,7 +149,7 @@ Steps
 2. `Clone <https://help.github.com/en/articles/cloning-a-repository>`_ your newly created repository to your local system where you want to perform the analysis
 3. Create and activate the conda environment
 4. Provide reference genome(s) and annotation(s) in ``/genomes_and_annotations/``
-5. List the chromosome/contig regions for which variants should be called in ``metadata/contigs_of_interest.bed`` (bed file format)
+5. List the chromosome/contig regions (bed file format) for which variants should be called in ``metadata/contigs_of_interest.bed``
 6. Specify the locations of input files and their meta data in ``/metadata/sample2runlib.csv``
 7. Provide lists of samples as sets to analyse in ``metadata/samplesets/``
 8. Uncomment the respective workflow option for your use case in the ``Snakefile``
@@ -165,21 +165,21 @@ For standard applications no additional edits are necessary. The rules reside in
 Workflow Use in Detail
 ----------------------
 
-We recommend using Linux, managing the software dependency trough conda and running the workflow in a dedicated conda virtual environment. The virtual environment is created once and all required software is available in any shell/terminal in which the environment has been "activated".
+We recommend using Linux, managing the software dependency trough conda/mamba and running the workflow in a dedicated conda virtual environment. The virtual environment is created once where then all required software is available in any shell/terminal in which the environment has been "activated".
 
 
-Creating the Virtual Environment (conda)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- The files ``envs/condaenv.yml`` and ``envs/additional.yml`` can directly be used to create the environment and install dependencies like so ("dna-proto" is an example, feel free to chose your own environment name):
+Creating the Virtual Environment (conda/mamba)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+The preferred way to create the environment is with ``mamba``. The code below will install mamba (if not already available), create an environment named "dna-proto", and activate it. If you are new to conda the please consult the `conda <https://docs.conda.io/projects/conda/en/latest/user-guide/getting-started.html>`_ documentation to get started.
 
 ::
 
-   $ conda create --name dna-proto
-   $ conda env update --name dna-proto --file condaenv.yml
-   $ conda env update --name dna-proto --file additional.yml
+   $ conda install mamba
+   $ mamba env create --file all-dependencies.yml
    $ conda activate dna-proto
 
-If ``env update`` does not work as intended or fails, then ``conda install`` the programs manually. Specify the correct channel and software version where required. Below we give examples, but please consult the `conda <https://docs.conda.io/projects/conda/en/latest/user-guide/getting-started.html>`_ (and `bioconda <https://bioconda.github.io/>`_) documentation.
+
+Alternatively, (and only if the above does not work as intended) ``conda install`` the individual programs manually. They are listed in ``all-dependencies.yml`. Specify the correct channel and version where required. Below we give examples, but please consult the `conda <https://docs.conda.io/projects/conda/en/latest/user-guide/getting-started.html>`_ (and `bioconda <https://bioconda.github.io/>`_) documentation.
 
 Example:
 
