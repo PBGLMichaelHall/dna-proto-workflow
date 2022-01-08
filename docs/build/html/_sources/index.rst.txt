@@ -170,7 +170,7 @@ We recommend using Linux, managing the software dependency trough conda/mamba an
 
 Creating the Virtual Environment (conda/mamba)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-The preferred way to create the environment is with ``mamba``. The code below will install mamba (if not already available), create an environment named "dna-proto", and activate it. If you are new to conda the please consult the `conda <https://docs.conda.io/projects/conda/en/latest/user-guide/getting-started.html>`_ documentation to get started.
+The preferred way to create the environment is with ``mamba``. The code below will install mamba (if not already available), create an environment named "dna-proto", and activate it. If you are new to conda then please consult the `conda <https://docs.conda.io/projects/conda/en/latest/user-guide/getting-started.html>`_ documentation to get started.
 
 ::
 
@@ -179,7 +179,7 @@ The preferred way to create the environment is with ``mamba``. The code below wi
    $ conda activate dna-proto
 
 
-Alternatively, (and only if the above does not work as intended) ``conda install`` the individual programs manually. They are listed in ``all-dependencies.yml`. Specify the correct channel and version where required. Below we give examples, but please consult the `conda <https://docs.conda.io/projects/conda/en/latest/user-guide/getting-started.html>`_ (and `bioconda <https://bioconda.github.io/>`_) documentation.
+Alternatively, (and only if the above does not work as intended) ``conda install`` the individual programs manually. They are listed in ``all-dependencies.yml``. Specify the correct channel and version where required. Below we give examples, but please consult the `conda <https://docs.conda.io/projects/conda/en/latest/user-guide/getting-started.html>`_ (and `bioconda <https://bioconda.github.io/>`_) documentation.
 
 Example:
 
