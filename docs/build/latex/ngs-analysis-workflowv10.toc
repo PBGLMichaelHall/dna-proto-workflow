@@ -10,7 +10,7 @@
 \contentsline {section}{\numberline {2}Workflow Use in a Nutshell \sphinxhyphen {} Checklist}{7}{section.2}
 \contentsline {subsection}{\numberline {2.1}Steps}{7}{subsection.2.1}
 \contentsline {section}{\numberline {3}Workflow Use in Detail}{8}{section.3}
-\contentsline {subsection}{\numberline {3.1}Creating the Virtual Environment (conda)}{8}{subsection.3.1}
+\contentsline {subsection}{\numberline {3.1}Creating the Virtual Environment (conda/mamba)}{8}{subsection.3.1}
 \contentsline {subsection}{\numberline {3.2}Reference Genome(s)}{8}{subsection.3.2}
 \contentsline {subsection}{\numberline {3.3}Reference Genome Annotation}{9}{subsection.3.3}
 \contentsline {subsection}{\numberline {3.4}Providing Required Meta information}{10}{subsection.3.4}

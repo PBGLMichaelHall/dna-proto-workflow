@@ -74,7 +74,7 @@
 
 
 \title{NGS\sphinxhyphen{}Analysis\sphinxhyphen{}workflow v.1.0}
-\date{Feb 12, 2021}
+\date{Jan 08, 2022}
 \release{}
 \author{Norman Warthmann (PBGL)}
 \newcommand{\sphinxlogo}{\vbox{}}
@@ -210,7 +210,7 @@ Utils/R\sphinxhyphen{}Scripts
 \capstart
 
 \noindent\sphinxincludegraphics[height=600\sphinxpxdimen]{{de-novo-02}.png}
-\caption{Flowchart for “denovo” (click to expand)}\label{\detokenize{index:id10}}\end{figure}
+\caption{Flowchart for “denovo” (click to expand)}\label{\detokenize{index:id11}}\end{figure}
 \begin{itemize}
 \item {} 
 Invoke this option by running the rule: \sphinxcode{\sphinxupquote{rules.denovo.input}}
@@ -318,7 +318,7 @@ snpEff
 \capstart
 
 \noindent\sphinxincludegraphics[height=800\sphinxpxdimen]{{varcall_05}.png}
-\caption{Flowchart for “varcall” (click to expand)}\label{\detokenize{index:id11}}\end{figure}
+\caption{Flowchart for “varcall” (click to expand)}\label{\detokenize{index:id12}}\end{figure}
 
 This option can be invoked in 2 ways:
 \begin{itemize}
@@ -387,7 +387,7 @@ Snakemake allows for fine\sphinxhyphen{}tuning resource allocation to the indivi
 
 \subsection{Software Dependencies}
 \label{\detokenize{index:software-dependencies}}
-We recommend running the workflow in its own \sphinxcode{\sphinxupquote{conda environment}} on a Linux Server. Dependencies are listed in \sphinxcode{\sphinxupquote{envs/condaenv.yml}} and \sphinxcode{\sphinxupquote{envs/additional.yml}}. A brief explanation how to use these files to generate the conda environment is further below. For comprehensive explanation please consult the \sphinxhref{https://docs.conda.io/projects/conda/en/latest/user-guide/getting-started.html}{conda} documentation. For software that is not available through conda on some important platforms we make the specific binaries available in \sphinxcode{\sphinxupquote{envs/}}; currently mainly abra2.jar.
+We recommend running the workflow in its own \sphinxcode{\sphinxupquote{conda environment}} on a Linux Server. Dependencies are listed in .yml files in \sphinxcode{\sphinxupquote{envs/}}. A brief explanation how to use these files to generate the conda environment is further below. For comprehensive explanation please consult the \sphinxhref{https://docs.conda.io/projects/conda/en/latest/user-guide/getting-started.html}{conda} documentation. For software that is not available through conda on some important platforms we make the specific binaries available in \sphinxcode{\sphinxupquote{envs/}}; currently mainly abra2.jar.
 
 
 \section{Workflow Use in a Nutshell \sphinxhyphen{} Checklist}
@@ -409,7 +409,7 @@ Create and activate the conda environment
 Provide reference genome(s) and annotation(s) in \sphinxcode{\sphinxupquote{/genomes\_and\_annotations/}}
 
 \item {} 
-List the chromosome/contig regions for which variants should be called in \sphinxcode{\sphinxupquote{metadata/contigs\_of\_interest.bed}} (bed file format)
+List the chromosome/contig regions (bed file format) for which variants should be called in \sphinxcode{\sphinxupquote{metadata/contigs\_of\_interest.bed}}
 
 \item {} 
 Specify the locations of input files and their meta data in \sphinxcode{\sphinxupquote{/metadata/sample2runlib.csv}}
@@ -443,23 +443,20 @@ After the successful snakemake run, \sphinxhref{https://snakemake.readthedocs.io
 
 \section{Workflow Use in Detail}
 \label{\detokenize{index:workflow-use-in-detail}}
-We recommend using Linux, managing the software dependency trough conda and running the workflow in a dedicated conda virtual environment. The virtual environment is created once and all required software is available in any shell/terminal in which the environment has been “activated”.
+We recommend using Linux, managing the software dependency trough conda/mamba and running the workflow in a dedicated conda virtual environment. The virtual environment is created once where then all required software is available in any shell/terminal in which the environment has been “activated”.
 
 
-\subsection{Creating the Virtual Environment (conda)}
-\label{\detokenize{index:creating-the-virtual-environment-conda}}\begin{quote}
-
-The files \sphinxcode{\sphinxupquote{envs/condaenv.yml}} and \sphinxcode{\sphinxupquote{envs/additional.yml}} can directly be used to create the environment and install dependencies like so (“dna\sphinxhyphen{}proto” is an example, feel free to chose your own environment name):
-\end{quote}
+\subsection{Creating the Virtual Environment (conda/mamba)}
+\label{\detokenize{index:creating-the-virtual-environment-conda-mamba}}
+The preferred way to create the environment is with \sphinxcode{\sphinxupquote{mamba}}. The code below will install mamba (if not already available), create an environment named “dna\sphinxhyphen{}proto”, and activate it. If you are new to conda then please consult the \sphinxhref{https://docs.conda.io/projects/conda/en/latest/user-guide/getting-started.html}{conda} documentation to get started.
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
-\PYGZdl{} conda create \PYGZhy{}\PYGZhy{}name dna\PYGZhy{}proto
-\PYGZdl{} conda env update \PYGZhy{}\PYGZhy{}name dna\PYGZhy{}proto \PYGZhy{}\PYGZhy{}file condaenv.yml
-\PYGZdl{} conda env update \PYGZhy{}\PYGZhy{}name dna\PYGZhy{}proto \PYGZhy{}\PYGZhy{}file additional.yml
+\PYGZdl{} conda install mamba
+\PYGZdl{} mamba env create \PYGZhy{}\PYGZhy{}file all\PYGZhy{}dependencies.yml
 \PYGZdl{} conda activate dna\PYGZhy{}proto
 \end{sphinxVerbatim}
 
-If \sphinxcode{\sphinxupquote{env update}} does not work as intended or fails, then \sphinxcode{\sphinxupquote{conda install}} the programs manually. Specify the correct channel and software version where required. Below we give examples, but please consult the \sphinxhref{https://docs.conda.io/projects/conda/en/latest/user-guide/getting-started.html}{conda} (and \sphinxhref{https://bioconda.github.io/}{bioconda}) documentation.
+Alternatively, (and only if the above does not work as intended) \sphinxcode{\sphinxupquote{conda install}} the individual programs manually. They are listed in \sphinxcode{\sphinxupquote{all\sphinxhyphen{}dependencies.yml}}. Specify the correct channel and version where required. Below we give examples, but please consult the \sphinxhref{https://docs.conda.io/projects/conda/en/latest/user-guide/getting-started.html}{conda} (and \sphinxhref{https://bioconda.github.io/}{bioconda}) documentation.
 
 Example:
 
@@ -499,7 +496,7 @@ The workflow will look for the reference genome(s) and associated files in \sphi
 \PYGZdl{} ngm \PYGZhy{}r \PYGZlt{}reference\PYGZhy{}genome.fa\PYGZgt{}
 \end{sphinxVerbatim}
 
-\# directory tree of the reference genome directory when fully prepared
+\# directory tree of an example reference genome directory when fully prepared
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYGZti{}/genomes\PYGZus{}and\PYGZus{}annotations/
@@ -520,7 +517,7 @@ The workflow will look for the reference genome(s) and associated files in \sphi
 \label{\detokenize{index:reference-genome-annotation}}
 In order to annotate variant effects using snpEff you will need a snpEff database (\sphinxcode{\sphinxupquote{snpEffectPredictor.bin}}) for the relevant reference genome. The location of the \sphinxcode{\sphinxupquote{snpeff}} database is configured in \sphinxcode{\sphinxupquote{snpeff.config}}. It is set to \sphinxcode{\sphinxupquote{genomes\_and\_annotations/snpeffdata/}} and again, we recommend separate subdirectories for the reference genomes also in this directory. Appending “\_snpeff” to these directory names will help avoid confusion. In order to create a \sphinxcode{\sphinxupquote{snpeff}} database, this \sphinxcode{\sphinxupquote{\textless{}reference\_genome\textgreater{}\_snpeff}} directory must contain the reference genome and the annotation in files named \sphinxcode{\sphinxupquote{sequences.fa}} and \sphinxcode{\sphinxupquote{genes.gff}}; they again can be soft links. (See \sphinxcode{\sphinxupquote{genomes\_and\_annotations/snpeffdata/readme}}.)
 
-Below is an example directory tree of \sphinxcode{\sphinxupquote{genomes\_and\_annotations/}} for a cowpea reference genome downloaded from NCBI. Notice that we store the reference genomes elsewhere and use soft links. Compare also to our entries in \sphinxcode{\sphinxupquote{snpeff.config}} under “Non\sphinxhyphen{}standard Databases” and replicate accordingly. The database \sphinxcode{\sphinxupquote{snpEffectPredictor.bin}} will be generated by \sphinxcode{\sphinxupquote{snpEff build}}.
+Below is an example directory tree of \sphinxcode{\sphinxupquote{genomes\_and\_annotations/}} for a cowpea reference genome downloaded from NCBI. Notice that we store the reference genomes elsewhere and use soft links. Compare also to our entries in \sphinxcode{\sphinxupquote{snpeff.config}} under “Non\sphinxhyphen{}standard Databases” and replicate accordingly for your files. The database \sphinxcode{\sphinxupquote{snpEffectPredictor.bin}} will be generated by \sphinxcode{\sphinxupquote{snpEff build}}.
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 genomes\PYGZus{}and\PYGZus{}annotations/
@@ -535,7 +532,7 @@ genomes\PYGZus{}and\PYGZus{}annotations/
         └── snpEffectPredictor.bin
 \end{sphinxVerbatim}
 
-For building the database you will need to add the respective entry in \sphinxcode{\sphinxupquote{snpeff.config}} and execute:
+Once the files are in place and the respective entry have been made in \sphinxcode{\sphinxupquote{snpeff.config}} the database \sphinxcode{\sphinxupquote{snpEffectPredictor.bin}} is generated by executing:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYGZdl{} snpEff build \PYGZhy{}v \PYGZhy{}c \PYGZlt{}path to snpEff.config\PYGZgt{} \textendash{}gff3 \PYGZlt{}reference\PYGZhy{}genome\PYGZgt{}\PYGZus{}snpeff
@@ -550,7 +547,7 @@ While a \sphinxcode{\sphinxupquote{.gtf}} file can also be used (\sphinxhyphen{}
 
 \subsubsection{Samplesets}
 \label{\detokenize{index:samplesets}}
-We use the term \sphinxstyleemphasis{sample} as the entity of interest. Our workflows call variants on \sphinxstyleemphasis{samples} within one \sphinxstyleemphasis{set}. Lists of sample names must be provided as text files (\sphinxcode{\sphinxupquote{.txt}}) in \sphinxcode{\sphinxupquote{/metadata/samplesets/}}. Each file defines a set. The \sphinxcode{\sphinxupquote{samplesets}} in \sphinxcode{\sphinxupquote{config.yml}} refer to those files and must match the filenames. We implemented a glob: \sphinxstyleemphasis{all\_samples}, which will have the effect of concatenating all \sphinxcode{\sphinxupquote{*.txt}} files in \sphinxcode{\sphinxupquote{/metadata/samplesets/}} into an additional set comprising all samples across all sets. The intention is to enable easy addition or removal of samples to/from an existing analysis.
+We use the term \sphinxstyleemphasis{sample} as the entity of interest. Our workflows call variants on \sphinxstyleemphasis{samples} within one \sphinxstyleemphasis{set}. Lists of sample names must be provided as text files (\sphinxcode{\sphinxupquote{.txt}}) in \sphinxcode{\sphinxupquote{/metadata/samplesets/}}. Each file defines a set. The \sphinxcode{\sphinxupquote{samplesets}} in \sphinxcode{\sphinxupquote{config.yml}} refer to those files and must match the basename of the filenames. We implemented a glob: \sphinxstyleemphasis{all\_samples}, which will have the effect of concatenating all \sphinxcode{\sphinxupquote{*.txt}} files in \sphinxcode{\sphinxupquote{/metadata/samplesets/}} into an additional set comprising all samples across all sets. The intention is to enable easy addition or removal of samples to/from an existing analysis.
 
 
 \subsubsection{Sample Definitions}
@@ -716,7 +713,7 @@ The workflow runs on \sphinxstyleemphasis{samples} in \sphinxstyleemphasis{sets}
 
 
 \subsubsection{De\sphinxhyphen{}Novo Analysis of sample relatedness (“denovo”)}
-\label{\detokenize{index:id6}}
+\label{\detokenize{index:id7}}
 Option \sphinxstylestrong{denovo} can be used to check the relatedness of \sphinxstyleemphasis{sequencing runs} and/or \sphinxstyleemphasis{samples} without the use of any reference genome. It will perform a comparative analysis based on k\sphinxhyphen{}mers on the raw data and output distance matrices. We recommend performing a de\sphinxhyphen{}novo analysis at the very start of every project at the “sequencing run”\sphinxhyphen{}level prior to any merging of runs into samples. This can help to detect mix\sphinxhyphen{}ups and mislabels. Run\sphinxhyphen{}level clustering is achieved by providing unique names for each sequencing run in the sample column of \sphinxcode{\sphinxupquote{metadata/sample2runlib.csv}}. De\sphinxhyphen{}novo analysis is invoked by calling \sphinxcode{\sphinxupquote{rules.denovo.input}} (Uncomment the respective line in the \sphinxcode{\sphinxupquote{Snakefile}}, and only this line). Pay attention to maintain the indentation.
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
@@ -734,7 +731,7 @@ Option \sphinxstylestrong{denovo} can be used to check the relatedness of \sphin
 
 
 \subsubsection{Variant Calling \sphinxhyphen{} Standard Re\sphinxhyphen{}Sequencing Analysis (“varcall”)}
-\label{\detokenize{index:id7}}
+\label{\detokenize{index:id8}}
 Running \sphinxcode{\sphinxupquote{rules.varcall.input}} will call variants and genotype \sphinxstyleemphasis{samples} with respect to one or several reference genomes. \sphinxstylestrong{varcall} will compare \sphinxstyleemphasis{samples} listed in \sphinxcode{\sphinxupquote{metadata/samplesets/}} with one another, as defined in the sample column. Invoke this analysis by uncommenting \sphinxcode{\sphinxupquote{rules.varcall.input}} (and only this line). Pay attention to maintain the indentation.
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
@@ -752,7 +749,7 @@ Running \sphinxcode{\sphinxupquote{rules.varcall.input}} will call variants and 
 
 
 \subsubsection{Variant Annotation \sphinxhyphen{} The Effects of Variants on Gene Function (“annotate”)}
-\label{\detokenize{index:id8}}
+\label{\detokenize{index:id9}}
 If a snpEff library for this (exact) reference genome is provided then the entire workflow can in principle be invoke by uncommenting \sphinxcode{\sphinxupquote{rules.annotate.input}} (and only this line). Pay attention to maintain the correct indentation.
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]

@@ -137,7 +137,7 @@ Snakemake allows for fine-tuning resource allocation to the individual rules, i.
 
 Software Dependencies
 ^^^^^^^^^^^^^^^^^^^^^
-We recommend running the workflow in its own ``conda environment`` on a Linux Server. Dependencies are listed in ``envs/condaenv.yml`` and ``envs/additional.yml``. A brief explanation how to use these files to generate the conda environment is further below. For comprehensive explanation please consult the `conda <https://docs.conda.io/projects/conda/en/latest/user-guide/getting-started.html>`_ documentation. For software that is not available through conda on some important platforms we make the specific binaries available in ``envs/``; currently mainly abra2.jar.
+We recommend running the workflow in its own ``conda environment`` on a Linux Server. Dependencies are listed in .yml files in ``envs/``. A brief explanation how to use these files to generate the conda environment is further below. For comprehensive explanation please consult the `conda <https://docs.conda.io/projects/conda/en/latest/user-guide/getting-started.html>`_ documentation. For software that is not available through conda on some important platforms we make the specific binaries available in ``envs/``; currently mainly abra2.jar.
 
 
 Workflow Use in a Nutshell - Checklist
@@ -149,7 +149,7 @@ Steps
 2. `Clone <https://help.github.com/en/articles/cloning-a-repository>`_ your newly created repository to your local system where you want to perform the analysis
 3. Create and activate the conda environment
 4. Provide reference genome(s) and annotation(s) in ``/genomes_and_annotations/``
-5. List the chromosome/contig regions for which variants should be called in ``metadata/contigs_of_interest.bed`` (bed file format)
+5. List the chromosome/contig regions (bed file format) for which variants should be called in ``metadata/contigs_of_interest.bed``
 6. Specify the locations of input files and their meta data in ``/metadata/sample2runlib.csv``
 7. Provide lists of samples as sets to analyse in ``metadata/samplesets/``
 8. Uncomment the respective workflow option for your use case in the ``Snakefile``
@@ -165,21 +165,21 @@ For standard applications no additional edits are necessary. The rules reside in
 Workflow Use in Detail
 ----------------------
 
-We recommend using Linux, managing the software dependency trough conda and running the workflow in a dedicated conda virtual environment. The virtual environment is created once and all required software is available in any shell/terminal in which the environment has been "activated".
+We recommend using Linux, managing the software dependency trough conda/mamba and running the workflow in a dedicated conda virtual environment. The virtual environment is created once where then all required software is available in any shell/terminal in which the environment has been "activated".
 
 
-Creating the Virtual Environment (conda)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- The files ``envs/condaenv.yml`` and ``envs/additional.yml`` can directly be used to create the environment and install dependencies like so ("dna-proto" is an example, feel free to chose your own environment name):
+Creating the Virtual Environment (conda/mamba)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+The preferred way to create the environment is with ``mamba``. The code below will install mamba (if not already available), create an environment named "dna-proto", and activate it. If you are new to conda then please consult the `conda <https://docs.conda.io/projects/conda/en/latest/user-guide/getting-started.html>`_ documentation to get started.
 
 ::
 
-   $ conda create --name dna-proto
-   $ conda env update --name dna-proto --file condaenv.yml
-   $ conda env update --name dna-proto --file additional.yml
+   $ conda install mamba
+   $ mamba env create --file all-dependencies.yml
    $ conda activate dna-proto
 
-If ``env update`` does not work as intended or fails, then ``conda install`` the programs manually. Specify the correct channel and software version where required. Below we give examples, but please consult the `conda <https://docs.conda.io/projects/conda/en/latest/user-guide/getting-started.html>`_ (and `bioconda <https://bioconda.github.io/>`_) documentation.
+
+Alternatively, (and only if the above does not work as intended) ``conda install`` the individual programs manually. They are listed in ``all-dependencies.yml``. Specify the correct channel and version where required. Below we give examples, but please consult the `conda <https://docs.conda.io/projects/conda/en/latest/user-guide/getting-started.html>`_ (and `bioconda <https://bioconda.github.io/>`_) documentation.
 
 Example:
 
@@ -219,7 +219,7 @@ The workflow will look for the reference genome(s) and associated files in ``gen
    $ bwa index -a bwtsw <reference-genome.fa>
    $ ngm -r <reference-genome.fa>
 
-# directory tree of the reference genome directory when fully prepared
+# directory tree of an example reference genome directory when fully prepared
 
 ::
 
@@ -241,7 +241,7 @@ Reference Genome Annotation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 In order to annotate variant effects using snpEff you will need a snpEff database (``snpEffectPredictor.bin``) for the relevant reference genome. The location of the ``snpeff`` database is configured in ``snpeff.config``. It is set to ``genomes_and_annotations/snpeffdata/`` and again, we recommend separate subdirectories for the reference genomes also in this directory. Appending "_snpeff" to these directory names will help avoid confusion. In order to create a ``snpeff`` database, this ``<reference_genome>_snpeff`` directory must contain the reference genome and the annotation in files named ``sequences.fa`` and ``genes.gff``; they again can be soft links. (See ``genomes_and_annotations/snpeffdata/readme``.)
 
-Below is an example directory tree of ``genomes_and_annotations/`` for a cowpea reference genome downloaded from NCBI. Notice that we store the reference genomes elsewhere and use soft links. Compare also to our entries in ``snpeff.config`` under “Non-standard Databases” and replicate accordingly. The database ``snpEffectPredictor.bin`` will be generated by ``snpEff build``.
+Below is an example directory tree of ``genomes_and_annotations/`` for a cowpea reference genome downloaded from NCBI. Notice that we store the reference genomes elsewhere and use soft links. Compare also to our entries in ``snpeff.config`` under “Non-standard Databases” and replicate accordingly for your files. The database ``snpEffectPredictor.bin`` will be generated by ``snpEff build``.
 
 ::
 
@@ -258,7 +258,7 @@ Below is an example directory tree of ``genomes_and_annotations/`` for a cowpea 
 
 
 
-For building the database you will need to add the respective entry in ``snpeff.config`` and execute:
+Once the files are in place and the respective entry have been made in ``snpeff.config`` the database ``snpEffectPredictor.bin`` is generated by executing:
 
 ::
 
@@ -276,7 +276,7 @@ Providing Required Meta information
 Samplesets
 ~~~~~~~~~~
 
-We use the term *sample* as the entity of interest. Our workflows call variants on *samples* within one *set*. Lists of sample names must be provided as text files (``.txt``) in ``/metadata/samplesets/``. Each file defines a set. The ``samplesets`` in ``config.yml`` refer to those files and must match the filenames. We implemented a glob: *all_samples*, which will have the effect of concatenating all ``*.txt`` files in ``/metadata/samplesets/`` into an additional set comprising all samples across all sets. The intention is to enable easy addition or removal of samples to/from an existing analysis.
+We use the term *sample* as the entity of interest. Our workflows call variants on *samples* within one *set*. Lists of sample names must be provided as text files (``.txt``) in ``/metadata/samplesets/``. Each file defines a set. The ``samplesets`` in ``config.yml`` refer to those files and must match the basename of the filenames. We implemented a glob: *all_samples*, which will have the effect of concatenating all ``*.txt`` files in ``/metadata/samplesets/`` into an additional set comprising all samples across all sets. The intention is to enable easy addition or removal of samples to/from an existing analysis.
 
 
 Sample Definitions

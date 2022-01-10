@@ -98,7 +98,7 @@
 </ul>
 </li>
 <li><a class="reference internal" href="#workflow-use-in-detail">Workflow Use in Detail</a><ul>
-<li><a class="reference internal" href="#creating-the-virtual-environment-conda">Creating the Virtual Environment (conda)</a></li>
+<li><a class="reference internal" href="#creating-the-virtual-environment-conda-mamba">Creating the Virtual Environment (conda/mamba)</a></li>
 <li><a class="reference internal" href="#reference-genome-s">Reference Genome(s)</a></li>
 <li><a class="reference internal" href="#reference-genome-annotation">Reference Genome Annotation</a></li>
 <li><a class="reference internal" href="#providing-required-meta-information">Providing Required Meta information</a><ul>
@@ -113,9 +113,9 @@
 </ul>
 </li>
 <li><a class="reference internal" href="#running-the-workflow-different-workflow-use-cases">Running the Workflow - different Workflow Use Cases</a><ul>
-<li><a class="reference internal" href="#id6">De-Novo Analysis of sample relatedness (“denovo”)</a></li>
-<li><a class="reference internal" href="#id7">Variant Calling - Standard Re-Sequencing Analysis (“varcall”)</a></li>
-<li><a class="reference internal" href="#id8">Variant Annotation - The Effects of Variants on Gene Function (“annotate”)</a></li>
+<li><a class="reference internal" href="#id7">De-Novo Analysis of sample relatedness (“denovo”)</a></li>
+<li><a class="reference internal" href="#id8">Variant Calling - Standard Re-Sequencing Analysis (“varcall”)</a></li>
+<li><a class="reference internal" href="#id9">Variant Annotation - The Effects of Variants on Gene Function (“annotate”)</a></li>
 <li><a class="reference internal" href="#expert-options">Expert Options</a></li>
 </ul>
 </li>
@@ -251,7 +251,7 @@ For details, please consult the <a class="reference external" href="https://snak
 </tr>
 </tbody>
 </table>
-<div class="figure align-center" id="id10">
+<div class="figure align-center" id="id11">
 <a class="reference internal image-reference" href="_images/de-novo-02.png"><img alt="dna-proto-workflow flowchart" src="_images/de-novo-02.png" style="height: 600px;" /></a>
 <p class="caption"><span class="caption-text">Flowchart for “denovo” (click to expand)</span></p>
 </div>
@@ -320,7 +320,7 @@ abra2</p></td>
 </tr>
 </tbody>
 </table>
-<div class="figure align-center" id="id11">
+<div class="figure align-center" id="id12">
 <a class="reference internal image-reference" href="_images/varcall_05.png"><img alt="dna-proto-workflow flowchart" src="_images/varcall_05.png" style="height: 800px;" /></a>
 <p class="caption"><span class="caption-text">Flowchart for “varcall” (click to expand)</span></p>
 </div>
@@ -371,7 +371,7 @@ abra2</p></td>
 </div>
 <div class="section" id="software-dependencies">
 <h3>Software Dependencies</h3>
-<p>We recommend running the workflow in its own <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">environment</span></code> on a Linux Server. Dependencies are listed in <code class="docutils literal notranslate"><span class="pre">envs/condaenv.yml</span></code> and <code class="docutils literal notranslate"><span class="pre">envs/additional.yml</span></code>. A brief explanation how to use these files to generate the conda environment is further below. For comprehensive explanation please consult the <a class="reference external" href="https://docs.conda.io/projects/conda/en/latest/user-guide/getting-started.html">conda</a> documentation. For software that is not available through conda on some important platforms we make the specific binaries available in <code class="docutils literal notranslate"><span class="pre">envs/</span></code>; currently mainly abra2.jar.</p>
+<p>We recommend running the workflow in its own <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">environment</span></code> on a Linux Server. Dependencies are listed in .yml files in <code class="docutils literal notranslate"><span class="pre">envs/</span></code>. A brief explanation how to use these files to generate the conda environment is further below. For comprehensive explanation please consult the <a class="reference external" href="https://docs.conda.io/projects/conda/en/latest/user-guide/getting-started.html">conda</a> documentation. For software that is not available through conda on some important platforms we make the specific binaries available in <code class="docutils literal notranslate"><span class="pre">envs/</span></code>; currently mainly abra2.jar.</p>
 </div>
 </div>
 <div class="section" id="workflow-use-in-a-nutshell-checklist">
@@ -383,7 +383,7 @@ abra2</p></td>
 <li><p><a class="reference external" href="https://help.github.com/en/articles/cloning-a-repository">Clone</a> your newly created repository to your local system where you want to perform the analysis</p></li>
 <li><p>Create and activate the conda environment</p></li>
 <li><p>Provide reference genome(s) and annotation(s) in <code class="docutils literal notranslate"><span class="pre">/genomes_and_annotations/</span></code></p></li>
-<li><p>List the chromosome/contig regions for which variants should be called in <code class="docutils literal notranslate"><span class="pre">metadata/contigs_of_interest.bed</span></code> (bed file format)</p></li>
+<li><p>List the chromosome/contig regions (bed file format) for which variants should be called in <code class="docutils literal notranslate"><span class="pre">metadata/contigs_of_interest.bed</span></code></p></li>
 <li><p>Specify the locations of input files and their meta data in <code class="docutils literal notranslate"><span class="pre">/metadata/sample2runlib.csv</span></code></p></li>
 <li><p>Provide lists of samples as sets to analyse in <code class="docutils literal notranslate"><span class="pre">metadata/samplesets/</span></code></p></li>
 <li><p>Uncomment the respective workflow option for your use case in the <code class="docutils literal notranslate"><span class="pre">Snakefile</span></code></p></li>
@@ -399,19 +399,16 @@ abra2</p></td>
 </div>
 <div class="section" id="workflow-use-in-detail">
 <h2>Workflow Use in Detail</h2>
-<p>We recommend using Linux, managing the software dependency trough conda and running the workflow in a dedicated conda virtual environment. The virtual environment is created once and all required software is available in any shell/terminal in which the environment has been “activated”.</p>
-<div class="section" id="creating-the-virtual-environment-conda">
-<h3>Creating the Virtual Environment (conda)</h3>
-<blockquote>
-<div><p>The files <code class="docutils literal notranslate"><span class="pre">envs/condaenv.yml</span></code> and <code class="docutils literal notranslate"><span class="pre">envs/additional.yml</span></code> can directly be used to create the environment and install dependencies like so (“dna-proto” is an example, feel free to chose your own environment name):</p>
-</div></blockquote>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ conda create --name dna-proto
-$ conda env update --name dna-proto --file condaenv.yml
-$ conda env update --name dna-proto --file additional.yml
+<p>We recommend using Linux, managing the software dependency trough conda/mamba and running the workflow in a dedicated conda virtual environment. The virtual environment is created once where then all required software is available in any shell/terminal in which the environment has been “activated”.</p>
+<div class="section" id="creating-the-virtual-environment-conda-mamba">
+<h3>Creating the Virtual Environment (conda/mamba)</h3>
+<p>The preferred way to create the environment is with <code class="docutils literal notranslate"><span class="pre">mamba</span></code>. The code below will install mamba (if not already available), create an environment named “dna-proto”, and activate it. If you are new to conda then please consult the <a class="reference external" href="https://docs.conda.io/projects/conda/en/latest/user-guide/getting-started.html">conda</a> documentation to get started.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ conda install mamba
+$ mamba env create --file all-dependencies.yml
 $ conda activate dna-proto
 </pre></div>
 </div>
-<p>If <code class="docutils literal notranslate"><span class="pre">env</span> <span class="pre">update</span></code> does not work as intended or fails, then <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">install</span></code> the programs manually. Specify the correct channel and software version where required. Below we give examples, but please consult the <a class="reference external" href="https://docs.conda.io/projects/conda/en/latest/user-guide/getting-started.html">conda</a> (and <a class="reference external" href="https://bioconda.github.io/">bioconda</a>) documentation.</p>
+<p>Alternatively, (and only if the above does not work as intended) <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">install</span></code> the individual programs manually. They are listed in <code class="docutils literal notranslate"><span class="pre">all-dependencies.yml</span></code>. Specify the correct channel and version where required. Below we give examples, but please consult the <a class="reference external" href="https://docs.conda.io/projects/conda/en/latest/user-guide/getting-started.html">conda</a> (and <a class="reference external" href="https://bioconda.github.io/">bioconda</a>) documentation.</p>
 <p>Example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ conda install -c bioconda samtools=1.9
 </pre></div>
@@ -441,7 +438,7 @@ $ bwa index -a bwtsw &lt;reference-genome.fa&gt;
 $ ngm -r &lt;reference-genome.fa&gt;
 </pre></div>
 </div>
-<p># directory tree of the reference genome directory when fully prepared</p>
+<p># directory tree of an example reference genome directory when fully prepared</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>~/genomes_and_annotations/
 ├── GCF_004118075.1_ASM411807v1
    ├── GCF_004118075.1_ASM411807v1_genomic.fna
@@ -459,7 +456,7 @@ $ ngm -r &lt;reference-genome.fa&gt;
 <div class="section" id="reference-genome-annotation">
 <h3>Reference Genome Annotation</h3>
 <p>In order to annotate variant effects using snpEff you will need a snpEff database (<code class="docutils literal notranslate"><span class="pre">snpEffectPredictor.bin</span></code>) for the relevant reference genome. The location of the <code class="docutils literal notranslate"><span class="pre">snpeff</span></code> database is configured in <code class="docutils literal notranslate"><span class="pre">snpeff.config</span></code>. It is set to <code class="docutils literal notranslate"><span class="pre">genomes_and_annotations/snpeffdata/</span></code> and again, we recommend separate subdirectories for the reference genomes also in this directory. Appending “_snpeff” to these directory names will help avoid confusion. In order to create a <code class="docutils literal notranslate"><span class="pre">snpeff</span></code> database, this <code class="docutils literal notranslate"><span class="pre">&lt;reference_genome&gt;_snpeff</span></code> directory must contain the reference genome and the annotation in files named <code class="docutils literal notranslate"><span class="pre">sequences.fa</span></code> and <code class="docutils literal notranslate"><span class="pre">genes.gff</span></code>; they again can be soft links. (See <code class="docutils literal notranslate"><span class="pre">genomes_and_annotations/snpeffdata/readme</span></code>.)</p>
-<p>Below is an example directory tree of <code class="docutils literal notranslate"><span class="pre">genomes_and_annotations/</span></code> for a cowpea reference genome downloaded from NCBI. Notice that we store the reference genomes elsewhere and use soft links. Compare also to our entries in <code class="docutils literal notranslate"><span class="pre">snpeff.config</span></code> under “Non-standard Databases” and replicate accordingly. The database <code class="docutils literal notranslate"><span class="pre">snpEffectPredictor.bin</span></code> will be generated by <code class="docutils literal notranslate"><span class="pre">snpEff</span> <span class="pre">build</span></code>.</p>
+<p>Below is an example directory tree of <code class="docutils literal notranslate"><span class="pre">genomes_and_annotations/</span></code> for a cowpea reference genome downloaded from NCBI. Notice that we store the reference genomes elsewhere and use soft links. Compare also to our entries in <code class="docutils literal notranslate"><span class="pre">snpeff.config</span></code> under “Non-standard Databases” and replicate accordingly for your files. The database <code class="docutils literal notranslate"><span class="pre">snpEffectPredictor.bin</span></code> will be generated by <code class="docutils literal notranslate"><span class="pre">snpEff</span> <span class="pre">build</span></code>.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>genomes_and_annotations/
 ├── GCF_004118075.1_ASM411807v1 -&gt; ~/genomes/GCF_004118075.1_ASM411807v1/
 ├── readme
@@ -472,7 +469,7 @@ $ ngm -r &lt;reference-genome.fa&gt;
         └── snpEffectPredictor.bin
 </pre></div>
 </div>
-<p>For building the database you will need to add the respective entry in <code class="docutils literal notranslate"><span class="pre">snpeff.config</span></code> and execute:</p>
+<p>Once the files are in place and the respective entry have been made in <code class="docutils literal notranslate"><span class="pre">snpeff.config</span></code> the database <code class="docutils literal notranslate"><span class="pre">snpEffectPredictor.bin</span></code> is generated by executing:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ snpEff build -v -c &lt;path to snpEff.config&gt; –gff3 &lt;reference-genome&gt;_snpeff
 </pre></div>
 </div>
@@ -483,7 +480,7 @@ While a <code class="docutils literal notranslate"><span class="pre">.gtf</span>
 <h3>Providing Required Meta information</h3>
 <div class="section" id="samplesets">
 <h4>Samplesets</h4>
-<p>We use the term <em>sample</em> as the entity of interest. Our workflows call variants on <em>samples</em> within one <em>set</em>. Lists of sample names must be provided as text files (<code class="docutils literal notranslate"><span class="pre">.txt</span></code>) in <code class="docutils literal notranslate"><span class="pre">/metadata/samplesets/</span></code>. Each file defines a set. The <code class="docutils literal notranslate"><span class="pre">samplesets</span></code> in <code class="docutils literal notranslate"><span class="pre">config.yml</span></code> refer to those files and must match the filenames. We implemented a glob: <em>all_samples</em>, which will have the effect of concatenating all <code class="docutils literal notranslate"><span class="pre">*.txt</span></code> files in <code class="docutils literal notranslate"><span class="pre">/metadata/samplesets/</span></code> into an additional set comprising all samples across all sets. The intention is to enable easy addition or removal of samples to/from an existing analysis.</p>
+<p>We use the term <em>sample</em> as the entity of interest. Our workflows call variants on <em>samples</em> within one <em>set</em>. Lists of sample names must be provided as text files (<code class="docutils literal notranslate"><span class="pre">.txt</span></code>) in <code class="docutils literal notranslate"><span class="pre">/metadata/samplesets/</span></code>. Each file defines a set. The <code class="docutils literal notranslate"><span class="pre">samplesets</span></code> in <code class="docutils literal notranslate"><span class="pre">config.yml</span></code> refer to those files and must match the basename of the filenames. We implemented a glob: <em>all_samples</em>, which will have the effect of concatenating all <code class="docutils literal notranslate"><span class="pre">*.txt</span></code> files in <code class="docutils literal notranslate"><span class="pre">/metadata/samplesets/</span></code> into an additional set comprising all samples across all sets. The intention is to enable easy addition or removal of samples to/from an existing analysis.</p>
 </div>
 <div class="section" id="sample-definitions">
 <h4>Sample Definitions</h4>
@@ -608,7 +605,7 @@ In case no <code class="docutils literal notranslate"><span class="pre">snpeff</
 <p>When configuring <code class="docutils literal notranslate"><span class="pre">config.yml</span></code>, keep in mind that configuration parameters of a downstream rule take precedence because parameters have to propagate upstream. I.e., when running <code class="docutils literal notranslate"><span class="pre">varcall</span></code>, the user must set alignment parameters in the <code class="docutils literal notranslate"><span class="pre">varcall:</span></code> section; same for <code class="docutils literal notranslate"><span class="pre">annotate:</span></code> parameters. They must be set under <code class="docutils literal notranslate"><span class="pre">snpeff:</span></code>.</p>
 <p>&gt;NOTE: Adjusting presumed upstream parameters, e.g., under <code class="docutils literal notranslate"><span class="pre">align:</span></code> will not have the intended effect. Only in special circumstances will the <code class="docutils literal notranslate"><span class="pre">rules.align.input</span></code> be run by itself and only then will you have to adjust parameters in the <code class="docutils literal notranslate"><span class="pre">align:</span></code> section.</p>
 <p>The workflow runs on <em>samples</em> in <em>sets</em> as listed in <code class="docutils literal notranslate"><span class="pre">samplesets/*.txt</span></code> and defined in <code class="docutils literal notranslate"><span class="pre">/metadata/sample2runlib.csv</span></code>. Sample names listed in <code class="docutils literal notranslate"><span class="pre">samplesets/*.txt</span></code> must correspond to the entries in the sample column in <code class="docutils literal notranslate"><span class="pre">/metadata/sample2runlib.csv</span></code>.</p>
-<div class="section" id="id6">
+<div class="section" id="id7">
 <h4>De-Novo Analysis of sample relatedness (“denovo”)</h4>
 <p>Option <strong>denovo</strong> can be used to check the relatedness of <em>sequencing runs</em> and/or <em>samples</em> without the use of any reference genome. It will perform a comparative analysis based on k-mers on the raw data and output distance matrices. We recommend performing a de-novo analysis at the very start of every project at the “sequencing run”-level prior to any merging of runs into samples. This can help to detect mix-ups and mislabels. Run-level clustering is achieved by providing unique names for each sequencing run in the sample column of <code class="docutils literal notranslate"><span class="pre">metadata/sample2runlib.csv</span></code>. De-novo analysis is invoked by calling <code class="docutils literal notranslate"><span class="pre">rules.denovo.input</span></code> (Uncomment the respective line in the <code class="docutils literal notranslate"><span class="pre">Snakefile</span></code>, and only this line). Pay attention to maintain the indentation.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rule</span> <span class="nb">all</span><span class="p">:</span>
@@ -624,7 +621,7 @@ In case no <code class="docutils literal notranslate"><span class="pre">snpeff</
 </pre></div>
 </div>
 </div>
-<div class="section" id="id7">
+<div class="section" id="id8">
 <h4>Variant Calling - Standard Re-Sequencing Analysis (“varcall”)</h4>
 <p>Running <code class="docutils literal notranslate"><span class="pre">rules.varcall.input</span></code> will call variants and genotype <em>samples</em> with respect to one or several reference genomes. <strong>varcall</strong> will compare <em>samples</em> listed in <code class="docutils literal notranslate"><span class="pre">metadata/samplesets/</span></code> with one another, as defined in the sample column. Invoke this analysis by uncommenting <code class="docutils literal notranslate"><span class="pre">rules.varcall.input</span></code> (and only this line). Pay attention to maintain the indentation.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rule</span> <span class="nb">all</span><span class="p">:</span>
@@ -640,7 +637,7 @@ In case no <code class="docutils literal notranslate"><span class="pre">snpeff</
 </pre></div>
 </div>
 </div>
-<div class="section" id="id8">
+<div class="section" id="id9">
 <h4>Variant Annotation - The Effects of Variants on Gene Function (“annotate”)</h4>
 <p>If a snpEff library for this (exact) reference genome is provided then the entire workflow can in principle be invoke by uncommenting <code class="docutils literal notranslate"><span class="pre">rules.annotate.input</span></code> (and only this line). Pay attention to maintain the correct indentation.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rule</span> <span class="nb">all</span><span class="p">:</span>
